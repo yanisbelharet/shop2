@@ -3,6 +3,7 @@ import { ShoppingCart, CheckCircle2, ShieldCheck, Clock, Plane, Smartphone, Chec
 import { motion } from 'motion/react';
 import { WILAYAS, DELIVERY_PRICES } from './data';
 import { getCommunesByWilayaId } from 'algeria-locations';
+import { Analytics } from '@vercel/analytics/react';
 
 // --- Components ---
 
@@ -155,7 +156,7 @@ const Features = () => {
               تصميم عملي بـ 7 خانات
             </h3>
             <p className="text-slate-600 text-lg leading-relaxed font-medium">
-              مقسمة بذكاء لتنظيم أدوية أسبوع كامل بسهولة تامة. تتميز بغطاء محكم الغلق يمنع تسرب الرطوبة أو الهواء، مما يحافظ على جودة وفعالية أدويتك لأطول فترة ممكنة.
+              مقسمة بذكاء لتنظيم أدوية أسبوع كامل بسهولة تامة. تتميز بغطاء محكم الغلق يمنع تسرب الرطوبة أو الهواء، مما يحاف�� على جودة وفعالية أدويتك لأطول فترة ممكنة.
             </p>
           </div>
         </div>
@@ -506,6 +507,7 @@ export default function App() {
           </a>
         </div>
       </motion.div>
+      <Analytics />
     </div>
   );
 }
