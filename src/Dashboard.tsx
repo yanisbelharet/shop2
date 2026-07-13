@@ -44,14 +44,14 @@ export default function Dashboard() {
         const contentType = res.headers.get("content-type");
         if (contentType && contentType.indexOf("application/json") !== -1) {
           const data = await res.json();
-          setError(data.error || 'كلمة المرور خاطئة');
+          setError(data.error || 'Mot de passe incorrect');
         } else {
           const text = await res.text();
           setError(`Error ${res.status}: ${text.substring(0, 50)}`);
         }
       }
     } catch (err: any) {
-      setError(`حدث خطأ في الاتصال: ${err.message}`);
+      setError(`Erreur de connexion : ${err.message}`);
     } finally {
       setLoading(false);
     }
@@ -87,17 +87,17 @@ export default function Dashboard() {
       });
       
       if (res.ok) {
-        setSaveMessage('تم الحفظ بنجاح');
+        setSaveMessage('Enregistré avec succès');
         setTimeout(() => setSaveMessage(''), 3000);
       } else {
         if (res.status === 401) {
           setIsAuthenticated(false);
         } else {
-          setSaveMessage('حدث خطأ أثناء الحفظ');
+          setSaveMessage('Erreur lors de la sauvegarde');
         }
       }
     } catch (err) {
-      setSaveMessage('حدث خطأ أثناء الحفظ');
+      setSaveMessage('Erreur lors de la sauvegarde');
     } finally {
       setSaving(false);
     }
@@ -105,18 +105,18 @@ export default function Dashboard() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4" dir="rtl">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4" dir="ltr">
         <div className="max-w-md w-full bg-white rounded-3xl shadow-xl border border-slate-100 p-8">
           <div className="flex justify-center mb-6">
             <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center text-slate-500">
               <Lock size={32} />
             </div>
           </div>
-          <h1 className="text-2xl font-black text-center text-slate-900 mb-8">تسجيل الدخول للإدارة</h1>
+          <h1 className="text-2xl font-black text-center text-slate-900 mb-8">Connexion Administration</h1>
           
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-2">كلمة المرور</label>
+              <label className="block text-sm font-bold text-slate-700 mb-2">Mot de passe</label>
               <input 
                 type="password" 
                 value={password}
@@ -134,7 +134,7 @@ export default function Dashboard() {
               disabled={loading}
               className="w-full py-3 px-4 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold transition-all disabled:opacity-70"
             >
-              {loading ? 'جاري التحقق...' : 'دخول'}
+              {loading ? 'Vérification...' : 'Se connecter'}
             </button>
           </form>
         </div>
@@ -143,22 +143,22 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8" dir="rtl">
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8" dir="ltr">
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-xl flex items-center justify-center">
               <Settings size={24} />
             </div>
-            <h1 className="text-2xl font-black text-slate-900">لوحة التحكم</h1>
+            <h1 className="text-2xl font-black text-slate-900">Tableau de bord</h1>
           </div>
           
           <button 
             onClick={handleLogout}
             className="flex items-center gap-2 px-4 py-2 text-slate-500 hover:text-slate-700 hover:bg-slate-200 bg-slate-100 rounded-lg transition-colors font-medium text-sm"
           >
-            <span>تسجيل الخروج</span>
             <LogOut size={16} />
+            <span>Se déconnecter</span>
           </button>
         </div>
         
@@ -166,10 +166,22 @@ export default function Dashboard() {
           <form onSubmit={handleSave} className="space-y-8">
             
             <div className="space-y-6">
-              <h2 className="text-lg font-bold text-slate-800 border-b pb-2">إعدادات المنتج</h2>
+              <h2 className="text-lg font-bold text-slate-800 border-b pb-2">Paramètres du Produit</h2>
               
+                            <div>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Prix avant promo (DA)</label>
+                <input 
+                  type="number" 
+                  value={config.productOldPrice || ''}
+                  onChange={(e) => setConfig({...config, productOldPrice: Number(e.target.value)})}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all font-mono"
+                  dir="ltr"
+                  required
+                />
+              </div>
+
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">سعر المنتج (د.ج)</label>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Prix après promo (DA)</label>
                 <input 
                   type="number" 
                   value={config.productPrice}
@@ -178,15 +190,15 @@ export default function Dashboard() {
                   dir="ltr"
                   required
                 />
-                <p className="text-xs text-slate-500 mt-2">هذا السعر سيظهر في صفحة الهبوط وسيتم إرساله كقيمة عند الشراء (بدون سعر التوصيل).</p>
+                <p className="text-xs text-slate-500 mt-2">Ce prix sera affiché sur la page de destination et sera envoyé comme valeur lors de l'achat (sans le prix de livraison).</p>
               </div>
             </div>
 
             <div className="space-y-6">
-              <h2 className="text-lg font-bold text-slate-800 border-b pb-2">إعدادات التتبع (Pixels)</h2>
+              <h2 className="text-lg font-bold text-slate-800 border-b pb-2">Paramètres de Suivi (Pixels)</h2>
               
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Facebook Pixel ID</label>
+                <label className="block text-sm font-bold text-slate-700 mb-2">Facebook Pixel ID (séparez par des virgules pour plusieurs)</label>
                 <input 
                   type="text" 
                   value={config.fbPixelId}
@@ -198,7 +210,7 @@ export default function Dashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">TikTok Pixel ID</label>
+                <label className="block text-sm font-bold text-slate-700 mb-2">TikTok Pixel ID (séparez par des virgules pour plusieurs)</label>
                 <input 
                   type="text" 
                   value={config.tiktokPixelId}
@@ -217,11 +229,11 @@ export default function Dashboard() {
                 className="flex items-center gap-2 py-3 px-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition-all disabled:opacity-70 shadow-lg shadow-indigo-200"
               >
                 <Save size={18} />
-                <span>{saving ? 'جاري الحفظ...' : 'حفظ التغييرات'}</span>
+                <span>{saving ? 'Enregistrement...' : 'Enregistrer les modifications'}</span>
               </button>
               
               {saveMessage && (
-                <span className={`font-medium ${saveMessage.includes('نجاح') ? 'text-emerald-600' : 'text-rose-600'}`}>
+                <span className={`font-medium ${saveMessage.includes('succès') ? 'text-emerald-600' : 'text-rose-600'}`}>
                   {saveMessage}
                 </span>
               )}

@@ -31,7 +31,7 @@ const CountdownTimer = () => {
   );
 };
 
-const Hero = ({ productPrice }: { productPrice: number }) => {
+const Hero = ({ productPrice, productOldPrice }: { productPrice: number, productOldPrice?: number }) => {
   return (
     <section className="relative pt-12 pb-16 px-4 overflow-hidden bg-slate-50 border-b border-slate-100">
       <div className="max-w-xl mx-auto text-center relative z-10 space-y-6">
@@ -85,7 +85,7 @@ const Hero = ({ productPrice }: { productPrice: number }) => {
 
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100 mt-8 mb-6">
           <div className="flex flex-col items-center justify-center gap-1">
-            <span className="text-slate-400 line-through text-lg font-medium">السعر الأصلي: {productPrice + 900} د.ج</span>
+            <span className="text-slate-400 line-through text-lg font-medium">السعر الأصلي: {productOldPrice || (productPrice + 900)} د.ج</span>
             <div className="flex items-baseline gap-2">
               <span className="text-slate-800 text-xl font-bold">السعر المخفض:</span>
               <span className="text-5xl font-black text-emerald-600">{productPrice}</span>
@@ -215,7 +215,7 @@ const Testimonials = () => {
   );
 };
 
-const CheckoutForm = ({ productPrice, onPurchase }: { productPrice: number, onPurchase: (p: number) => void }) => {
+const CheckoutForm = ({ productPrice, productOldPrice, onPurchase }: { productPrice: number, productOldPrice?: number, onPurchase: (p: number) => void }) => {
   const [formData, setFormData] = useState<{
     name: string;
     phone: string;
@@ -301,7 +301,7 @@ const CheckoutForm = ({ productPrice, onPurchase }: { productPrice: number, onPu
         <div className="flex justify-between items-center mb-4">
           <span className="text-slate-600 font-bold">سعر المنتج:</span>
           <div className="flex items-center gap-2">
-            <span className="text-slate-400 line-through text-sm">{productPrice + 900} د.ج</span>
+            <span className="text-slate-400 line-through text-sm">{productOldPrice || (productPrice + 900)} د.ج</span>
             <span className="text-2xl font-black text-emerald-600">{productPrice} د.ج</span>
           </div>
         </div>
@@ -418,14 +418,14 @@ const CheckoutForm = ({ productPrice, onPurchase }: { productPrice: number, onPu
           disabled={loading}
           className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xl py-5 rounded-2xl shadow-xl shadow-emerald-200 transform transition-all active:scale-95 flex justify-center items-center gap-3 mt-6 disabled:opacity-70 disabled:cursor-not-allowed"
         >
-          {loading ? 'جاري تسجيل الطلب...' : 'تأكيد الطلب الآن'}
+          {loading ? 'Enregistrement de la commande...' : 'Confirmer la commande maintenant'}
         </button>
       </div>
     </form>
   );
 };
 
-export default function LandingPage({ productPrice, onPurchase }: { productPrice: number, onPurchase: (p: number) => void }) {
+export default function LandingPage({ productPrice, productOldPrice, onPurchase }: { productPrice: number, productOldPrice?: number, onPurchase: (p: number) => void }) {
   const [showStickyButton, setShowStickyButton] = useState(false);
 
   useEffect(() => {
@@ -459,7 +459,7 @@ export default function LandingPage({ productPrice, onPurchase }: { productPrice
   return (
     <div className="min-h-screen bg-slate-100 pb-24 font-sans text-slate-800" dir="rtl">
       <div className="max-w-2xl mx-auto bg-white shadow-2xl min-h-screen overflow-hidden">
-        <Hero productPrice={productPrice} />
+        <Hero productPrice={productPrice} productOldPrice={productOldPrice} />
         <Features />
         <Testimonials />
 
@@ -473,7 +473,7 @@ export default function LandingPage({ productPrice, onPurchase }: { productPrice
                 أدخل معلوماتك أدناه وسنقوم بالاتصال بك لتأكيد طلبك وتوصيله في أقرب وقت.
               </p>
             </div>
-            <CheckoutForm productPrice={productPrice} onPurchase={onPurchase} />
+            <CheckoutForm productPrice={productPrice} productOldPrice={productOldPrice} onPurchase={onPurchase} />
           </div>
         </section>
 
