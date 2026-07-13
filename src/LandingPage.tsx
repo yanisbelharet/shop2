@@ -242,7 +242,7 @@ const CheckoutForm = ({ productPrice, onPurchase }: { productPrice: number, onPu
     setLoading(true);
     
     try {
-      const response = await fetch('/api/order', {
+      const response = await fetch('/api/submitOrder', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
