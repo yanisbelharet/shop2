@@ -41,11 +41,17 @@ export default function Dashboard() {
         setIsAuthenticated(true);
         fetchConfig();
       } else {
-        const data = await res.json();
-        setError(data.error || 'كلمة المرور خاطئة');
+        const contentType = res.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          const data = await res.json();
+          setError(data.error || 'كلمة المرور خاطئة');
+        } else {
+          const text = await res.text();
+          setError(`Error ${res.status}: ${text.substring(0, 50)}`);
+        }
       }
-    } catch (err) {
-      setError('حدث خطأ في الاتصال');
+    } catch (err: any) {
+      setError(`حدث خطأ في الاتصال: ${err.message}`);
     } finally {
       setLoading(false);
     }
