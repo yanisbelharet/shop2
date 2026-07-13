@@ -8,6 +8,7 @@ import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 export default function App() {
   const [config, setConfig] = useState<{
     productPrice: number;
+    productOldPrice: number;
     fbPixelId: string;
     tiktokPixelId: string;
   } | null>(null);
@@ -15,10 +16,11 @@ export default function App() {
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "config", "main"), (docSnap) => {
       if (docSnap.exists()) {
-        setConfig(docSnap.data() as any);
+        setConfig({ productPrice: 2000, productOldPrice: 3500, fbPixelId: "", tiktokPixelId: "", ...docSnap.data() } as any);
       } else {
         setConfig({
           productPrice: 2000,
+          productOldPrice: 3500,
           fbPixelId: "",
           tiktokPixelId: ""
         });
@@ -40,7 +42,8 @@ export default function App() {
         s.parentNode.insertBefore(t,s)}(window, document,'script',
         'https://connect.facebook.net/en_US/fbevents.js');
         
-        window.fbq('init', config.fbPixelId);
+        const fbPixels = config.fbPixelId.split(',').map(p => p.trim()).filter(Boolean);
+        fbPixels.forEach(p => window.fbq('init', p));
         window.fbq('track', 'PageView');
       }
 
@@ -48,7 +51,8 @@ export default function App() {
       if (config.tiktokPixelId) {
         !function (w, d, t) {
           w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"];ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e};ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
-          ttq.load(config.tiktokPixelId);
+          const ttPixels = config.tiktokPixelId.split(',').map(p => p.trim()).filter(Boolean);
+          ttPixels.forEach(p => ttq.load(p));
           ttq.page();
         }(window, document, 'ttq');
       }
@@ -64,12 +68,12 @@ export default function App() {
     }
   };
 
-  if (!config) return <div className="min-h-screen flex items-center justify-center">جاري التحميل...</div>;
+  if (!config) return <div className="min-h-screen flex items-center justify-center">Chargement...</div>;
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LandingPage productPrice={config.productPrice} onPurchase={handlePurchase} />} />
+        <Route path="/" element={<LandingPage productPrice={config.productPrice} productOldPrice={config.productOldPrice} onPurchase={handlePurchase} />} />
         <Route path="/admin" element={<Dashboard />} />
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
