@@ -3,6 +3,7 @@ import { ShoppingCart, CheckCircle2, ShieldCheck, Clock, Plane, Smartphone, Chec
 import { motion } from 'motion/react';
 import { WILAYAS, DELIVERY_PRICES } from './data';
 import { getCommunesByWilayaId } from 'algeria-locations';
+import { Analytics } from '@vercel/analytics/react';
 
 // --- Components ---
 
@@ -494,7 +495,7 @@ export default function App() {
       >
         <div className="w-full max-w-2xl mx-auto flex items-center justify-between gap-4 px-2">
           <div className="hidden sm:flex flex-col text-right">
-            <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">سارع بالطلب</span>
+            <span className="text-slate-500 text-xs font-bold uppercase tracking-wider">سارع بالط��ب</span>
             <span className="text-rose-600 font-black text-sm">تبقى 5 قطع فقط!</span>
           </div>
           <a 
@@ -506,6 +507,7 @@ export default function App() {
           </a>
         </div>
       </motion.div>
+      <Analytics />
     </div>
   );
 }
