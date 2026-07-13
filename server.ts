@@ -83,7 +83,7 @@ async function startServer() {
     res.json({ success: true, config: newConfig });
   });
 
-  app.post("/api/order", async (req, res) => {
+  app.post("/api/submitOrder", async (req, res) => {
     try {
       const { name, phone, wilaya, commune, deliveryType, price } = req.body;
       
