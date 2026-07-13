@@ -9,6 +9,7 @@ import { getFirestore, FieldValue } from "firebase-admin/firestore";
 // Default config
 const defaultConfig = {
   productPrice: 2000,
+  productOldPrice: 3500,
   fbPixelId: "",
   tiktokPixelId: ""
 };
